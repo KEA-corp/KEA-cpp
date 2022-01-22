@@ -68,13 +68,6 @@ string readFile(const string& path) { // delftstack.com
 	return ss.str();
 }
 
-int string_to_int(string texte) {
-	stringstream intValue(texte);
-	int number = 0;
-	intValue >> number;
-	return number;
-}
-
 int calc(string calcul, int var1, int var2) {
 	if (calcul == "+") {
 		return var1 + var2;
@@ -98,6 +91,27 @@ int calc(string calcul, int var1, int var2) {
 		cout << "calc: operateur inconnu: " << calcul << endl;
 	}
 	return 0;
+}
+
+int string_to_int(string texte) {
+	stringstream intValue(texte);
+	int number = 0;
+	intValue >> number;
+	return number;
+}
+
+void codeinloop(vector<string> code, string nom, int max);
+
+string bcl_ctrl(vector<string> code, int i, string nom, int nb) {
+	
+	vector<string> codetoloop;
+
+	for (int j = i + 1; j < code.size(); j++) {
+		codetoloop.push_back(code[j]);
+	}
+
+	codeinloop(codetoloop, nom, nb);
+	return nom;
 }
 
 void codeinloop(vector<string> code, string nom, int max) {
@@ -138,6 +152,19 @@ void codeinloop(vector<string> code, string nom, int max) {
 					}
 					else {
 						DEBUGPRINT = true;
+					}
+				}
+
+				else if (mode == "L") {
+					sauter = bcl_ctrl(code, i, args[1], getvar(args[2]));
+				}
+
+				else if (mode == "E") {
+					if (args[1] == nom) {
+						if (DEBUGPRINT) {
+							cout << "arret de la boucle '" << nom << "'" << endl;
+						}
+						break;
 					}
 				}
 
