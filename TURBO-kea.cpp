@@ -182,6 +182,10 @@ void codeinloop(vector<string> code, string nom, int max) {
 					}
 				}
 
+				else if (mode == "H") {
+					setvar(args[1], getvar(args[2]));
+				}
+
 				else if (mode == "L") {
 					sauter = bcl_ctrl(code, i, args[1], getvar(args[2]));
 				}
@@ -192,6 +196,18 @@ void codeinloop(vector<string> code, string nom, int max) {
 							cout << "arret de la boucle '" << nom << "'" << endl;
 						}
 						break;
+					}
+				}
+
+				else if (mode == "X") {
+					if (getvar(args[2]) == 1) {
+						sauter = bcl_ctrl(code, i, args[1], 1);
+					}
+					else {
+						sauter = args[1];
+						if (DEBUGPRINT) {
+							cout << "condition non remplie: " << sauter << endl;
+						}
 					}
 				}
 
