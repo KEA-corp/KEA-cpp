@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <sstream>
+
 
 using namespace std;
 
@@ -12,13 +14,17 @@ bool DEBUGPRINT = true;
 void setvar(string name, int vall) {
 	for (int i = 0; i <= maxset; i++) {
 		if (var_name[i] == name) {
+			if (DEBUGPRINT) {cout << "modification de: " << name << " = " << vall << endl; }
 			var_liste[i] = vall;
 			return;
 		}
 	}
 	maxset++;
-	var_liste[maxset] = vall;
+	if (DEBUGPRINT) {
+		cout << "creation de: " << name << " = " << vall << endl;
+	}
 	var_name[maxset] = name;
+	var_liste[maxset] = vall;
 }
 
 int getvar(string name) {
@@ -49,24 +55,41 @@ vector<string> split(string x, char delim = ' ')
 	return splitted;
 }
 
+int string_to_int(string texte) {
+	stringstream intValue(texte);
+	int number = 0;
+	intValue >> number;
+	return number;
+}
 
 void codeinloop(vector<string> code, string nom, int max) {
 	if (DEBUGPRINT) {
 		cout << "demarage de la boucle: " << nom << endl;
 	}
-	string sauter = nom;
+	string sauter = "";
 	for (int rep = 0; rep < max; rep++) {
 		for (int i = 0; i < code.size(); i++) {
 			string ligne = code[i];
 			if (DEBUGPRINT) {
-				cout << "[" << nom << "](" << rep << "~" << i << ")*** " << ligne << " ***\n" << endl;
+				cout << "[" << nom << "](" << rep << "~" << i << ")*** " << ligne << " ***" << endl;
 			}
 			
-			vector<string> arg = split(ligne, ' ');
-			string mod = arg[0];
+			vector<string> args = split(ligne, ' ');
+			string mode = args[0];
 
-			cout << mod << endl;
-			
+			if (sauter == "" || (mode == "E" && args[1] == sauter)) {
+				if (sauter != "") {
+					sauter = "";
+				}
+				if (mode == "") {
+					continue;
+				}
+
+				else if (mode == "V") {
+					setvar(args[1], string_to_int(args[2]));
+				}
+
+			}			
 		}
 	}
 }
@@ -77,6 +100,7 @@ void start(string code) {
 }
 
 int main() {
-	start("V 1 1;V 2 2");
+	start("V a 1;V b 2;V a 2");
+
 	return EXIT_SUCCESS;
 }
