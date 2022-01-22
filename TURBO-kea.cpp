@@ -50,18 +50,31 @@ vector<string> split(string x, char delim = ' ')
 }
 
 
-void codeinloop(vector<string>, string nom, int max) {
+void codeinloop(vector<string> code, string nom, int max) {
 	if (DEBUGPRINT) {
 		cout << "demarage de la boucle: " << nom << endl;
 	}
 	string sauter = nom;
+	for (int rep = 0; rep < max; rep++) {
+		for (int i = 0; i < code.size(); i++) {
+			string ligne = code[i];
+			if (DEBUGPRINT) {
+				cout << "[" << nom << "](" << rep << "~" << i << ")*** " << ligne << " ***\n" << endl;
+			}
+			
+			vector<string> arg = split(ligne, ' ');
+			string mod = arg[0];
+
+			cout << mod << endl;
+			
+		}
+	}
 }
 
 void start(string code) {
 	vector<string> sortie = split(code, ';');
 	codeinloop(sortie, "main", 1);
 }
-
 
 int main() {
 	start("V 1 1;V 2 2");
