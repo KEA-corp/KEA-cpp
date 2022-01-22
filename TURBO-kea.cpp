@@ -95,12 +95,16 @@ void codeinloop(vector<string> code, string nom, int max) {
 }
 
 void start(string code) {
+	while (code.find_first_of("\n") != string::npos) {
+		code.replace(code.find("\n"), 1, ";");
+	}
 	vector<string> sortie = split(code, ';');
 	codeinloop(sortie, "main", 1);
 }
 
 int main() {
-	start("V a 1;V b 2;V a 2");
+
+	start("V a 1\nV b 2;V a 2");
 
 	return EXIT_SUCCESS;
 }
