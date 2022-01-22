@@ -172,6 +172,16 @@ void codeinloop(vector<string> code, string nom, int max) {
 					setvar(args[1], calc(args[3], getvar(args[2]), getvar(args[4])));
 				}
 
+				else if (mode == "S") {
+					if (args.size() == 1) {
+						cout << endl;
+					}
+					else {
+						cout << args[1];
+					}
+					if (DEBUGPRINT) { cout << endl; }
+				}
+
 			}
 		}
 	}
