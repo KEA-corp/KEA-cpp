@@ -93,6 +93,33 @@ int calc(string calcul, int var1, int var2) {
 	return 0;
 }
 
+int compar(string comparateur, string var1, string var2) {
+	int a = getvar(var1);
+	int b = getvar(var2);
+	if (comparateur == "==" || comparateur == "=") {
+		return a == b;
+	}
+	else if (comparateur == "!=") {
+		return a != b;
+	}
+	else if (comparateur == ">") {
+		return a > b;
+	}
+	else if (comparateur == "<") {
+		return a < b;
+	}
+	else if (comparateur == ">=") {
+		return a >= b;
+	}
+	else if (comparateur == "<=") {
+		return a <= b;
+	}
+	else {
+		cout << "Erreur dde comparaison: '" << comparateur << endl;
+		return 0;
+	}
+}
+
 int string_to_int(string texte) {
 	stringstream intValue(texte);
 	int number = 0;
@@ -170,6 +197,14 @@ void codeinloop(vector<string> code, string nom, int max) {
 
 				else if (mode == "C") {
 					setvar(args[1], calc(args[3], getvar(args[2]), getvar(args[4])));
+				}
+
+				else if (mode == "B") {
+					setvar(args[1], compar(args[3], args[2], args[4]));
+				}
+
+				else if (mode == "Z") {
+					break;
 				}
 
 				else if (mode == "S") {
