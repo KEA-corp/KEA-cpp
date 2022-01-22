@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,7 +10,7 @@ using namespace std;
 int var_liste[512] = { 0 };
 string var_name[512] = { "unset" };
 int maxset = 0;
-bool DEBUGPRINT = true;
+bool DEBUGPRINT = false;
 
 void setvar(string name, int vall) {
 	for (int i = 0; i <= maxset; i++) {
@@ -55,11 +56,48 @@ vector<string> split(string x, char delim = ' ')
 	return splitted;
 }
 
+string readFile(const string& path) { // delftstack.com
+	auto ss = ostringstream{};
+	ifstream input_file(path);
+	if (!input_file.is_open()) {
+		cerr << "Impossible de lire le fichier - '"
+			<< path << "'" << endl;
+		exit(EXIT_FAILURE);
+	}
+	ss << input_file.rdbuf();
+	return ss.str();
+}
+
 int string_to_int(string texte) {
 	stringstream intValue(texte);
 	int number = 0;
 	intValue >> number;
 	return number;
+}
+
+int calc(string calcul, int var1, int var2) {
+	if (calcul == "+") {
+		return var1 + var2;
+	}
+	else if (calcul == "-") {
+		return var1 - var2;
+	}
+	else if (calcul == "*") {
+		return var1 * var2;
+	}
+	else if (calcul == "/") {
+		return var1 / var2;
+	}
+	else if (calcul == "^") {
+		return pow(var1, var2);
+	}
+	else if (calcul == "%") {
+		return var1 % var2;
+	}
+	else {
+		cout << "calc: operateur inconnu: " << calcul << endl;
+	}
+	return 0;
 }
 
 void codeinloop(vector<string> code, string nom, int max) {
@@ -89,7 +127,25 @@ void codeinloop(vector<string> code, string nom, int max) {
 					setvar(args[1], string_to_int(args[2]));
 				}
 
-			}			
+				else if (mode == "A") {
+					cout << getvar(args[1]);
+					if (DEBUGPRINT) {cout << "\n";}
+				}
+
+				else if (mode == "D") {
+					if (args[1] == "off") {
+						DEBUGPRINT = false;
+					}
+					else {
+						DEBUGPRINT = true;
+					}
+				}
+
+				else if (mode == "C") {
+					setvar(args[1], calc(args[3], getvar(args[2]), getvar(args[4])));
+				}
+
+			}
 		}
 	}
 }
@@ -103,8 +159,9 @@ void start(string code) {
 }
 
 int main() {
-
-	start("V a 1\nV b 2;V a 2");
+	string filename("code.kea");
+	string file_contents = readFile(filename);
+	start(file_contents);
 
 	return EXIT_SUCCESS;
 }
